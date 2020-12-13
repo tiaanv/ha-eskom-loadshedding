@@ -8,6 +8,8 @@ import voluptuous as vol
 from .const import (  # pylint: disable=unused-import
     CONF_SCAN_PERIOD,
     DEFAULT_SCAN_PERIOD,
+    CONF_AREA,
+    DEFAULT_AREA,
     DOMAIN,
     MIN_SCAN_PERIOD,
     PLATFORMS,
@@ -67,11 +69,25 @@ class EskomOptionsFlowHandler(config_entries.OptionsFlow):
                 self.options[CONF_SCAN_PERIOD] = MIN_SCAN_PERIOD
                 return await self._update_options()
 
+            # Set default Area to 0 
+            if int(user_input[CONF_AREA]) >= 0 and int(user_input[CONF_AREA]) <= 23:
+                self.options.update(user_input)
+                return await self._update_options()
+            else:
+                self.options[CONF_AREA] = DEFAULT_AREA
+                return await self._update_options()
+
         data_schema = OrderedDict()
         data_schema[
             vol.Optional(
                 CONF_SCAN_PERIOD,
                 default=self.options.get(CONF_SCAN_PERIOD, DEFAULT_SCAN_PERIOD),
+            )
+        ] = int
+        data_schema[
+            vol.Optional(
+                CONF_AREA,
+                default=self.options.get(CONF_AREA, DEFAULT_AREA),
             )
         ] = int
 
