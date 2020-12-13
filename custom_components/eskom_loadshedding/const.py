@@ -17,10 +17,12 @@ PLATFORMS = [SENSOR]
 # Configuration and options
 CONF_ENABLED = "enabled"
 CONF_SCAN_PERIOD = "scan_period"
+CONF_AREA = "coct_area"
 
 # Defaults
 DEFAULT_SCAN_PERIOD = 900
 MIN_SCAN_PERIOD = 300
+DEFAULT_AREA = 0
 
 # Defaults
 DEFAULT_NAME = DOMAIN
