@@ -17,6 +17,8 @@ from .eskom_interface import eskom_interface
 from .const import (
     CONF_SCAN_PERIOD,
     DEFAULT_SCAN_PERIOD,
+    CONF_AREA,
+    DEFAULT_AREA,
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
@@ -39,6 +41,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     scan_period = timedelta(
         seconds=entry.options.get(CONF_SCAN_PERIOD, DEFAULT_SCAN_PERIOD)
     )
+    
+    coct_area = entry.options.get(CONF_AREA, DEFAULT_AREA)
 
     coordinator = EskomDataUpdateCoordinator(hass, scan_period)
     await coordinator.async_refresh()
