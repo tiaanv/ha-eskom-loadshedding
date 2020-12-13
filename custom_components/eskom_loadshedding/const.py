@@ -25,7 +25,32 @@ MIN_SCAN_PERIOD = 300
 # Defaults
 DEFAULT_NAME = DOMAIN
 
+# Loadshedding shedule contants
+NUM_DAY_GROUPS = 16
+NUM_TIME_SLOTS = 12
+NUM_AREA_CODES = 16
 
+HIGHEST_STAGE = 8
+MAX_MONTH_DAY = 31
+
+DAY_AREA_EXTRA_INCREMENTS = [5, 9]
+DAY_AREA_EXTR_INCREMENTS_STAGE_LOWER = [13]
+
+STAGE_STARTING_AREAS = {
+	1: 1,
+	2: 9,
+	3: 13,
+	4: 5,
+	5: 2,
+	6: 10,
+	7: 14,
+	8: 6
+}
+
+TIME_SLOT_HOURS = 2
+TIME_SLOT_MINUTES = 30
+
+# Defaults
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------
 {NAME}
