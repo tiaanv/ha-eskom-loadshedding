@@ -1,4 +1,6 @@
 import ssl
+from .loadshedding_schedule import isLoadSheddingNow, getNextTimeSlot
+
 
 from aiohttp.client_exceptions import ClientConnectorError, ServerDisconnectedError
 from aiohttp_retry import RetryClient
@@ -68,10 +70,22 @@ class eskom_interface:
             f"Error, invalid loadshedding stage received from API after {attempts} attempts"
         )
 
-    async def async_get_data(self):
+    async def async_get_data(self, coct_area):
         """Fetches data from the loadshedding API"""
         stage = await self.async_get_stage()
+
+        if stage > 0:
+            load_shedding_active = isLoadSheddingNow(stage, coct_area)["status"]
+            next_load_shedding = getNextTimeSlot(stage, coct_area)["date"]
+        else:
+            load_shedding_active = False
+            next_load_shedding = "N/A"
+
         data = {
-            "data": {"stage": stage},
+            "data": {
+                "stage": stage,
+                "load_shedding_active": load_shedding_active,
+                "next_load_shedding": next_load_shedding,
+            },
         }
         return data

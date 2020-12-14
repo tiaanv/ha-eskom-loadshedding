@@ -13,6 +13,7 @@ from homeassistant.core import Config, HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from .eskom_interface import eskom_interface
+from .loadshedding_schedule import *
 
 from .const import (
     CONF_SCAN_PERIOD,
@@ -41,10 +42,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     scan_period = timedelta(
         seconds=entry.options.get(CONF_SCAN_PERIOD, DEFAULT_SCAN_PERIOD)
     )
-    
+
     coct_area = entry.options.get(CONF_AREA, DEFAULT_AREA)
 
-    coordinator = EskomDataUpdateCoordinator(hass, scan_period)
+    coordinator = EskomDataUpdateCoordinator(hass, scan_period, coct_area)
     await coordinator.async_refresh()
 
     if not coordinator.last_update_success:
@@ -68,17 +69,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 class EskomDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass, scan_period):
+    def __init__(self, hass, scan_period, coct_area):
         """Initialize."""
         self.api = eskom_interface()
         self.platforms = []
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=scan_period)
+        self.coct_area = int(coct_area)
 
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            data = await self.api.async_get_data()
+            data = await self.api.async_get_data(self.coct_area)
             return data.get("data", {})
         except Exception as exception:
             raise UpdateFailed(exception)
