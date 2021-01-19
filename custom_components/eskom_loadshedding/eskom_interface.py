@@ -4,6 +4,9 @@ from .loadshedding_schedule import isLoadSheddingNow, getNextTimeSlot
 
 from aiohttp.client_exceptions import ClientConnectorError, ServerDisconnectedError
 from aiohttp_retry import RetryClient
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class eskom_interface:
@@ -73,7 +76,6 @@ class eskom_interface:
     async def async_get_data(self, coct_area):
         """Fetches data from the loadshedding API"""
         stage = await self.async_get_stage()
-
         if stage > 0:
             load_shedding_active = isLoadSheddingNow(stage, coct_area)["status"]
             next_load_shedding = getNextTimeSlot(stage, coct_area)["date"]

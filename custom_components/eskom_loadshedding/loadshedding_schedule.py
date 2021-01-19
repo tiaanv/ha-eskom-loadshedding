@@ -81,21 +81,21 @@ def getNextTimeSlotInDay(stage, day, areaCode, fromHour=-1):
         if fromHour == -1 or slotHour > fromHour:
             return slot
 
-    return 0
+    return None
 
 
 def getNextTimeSlot(stage, areaCode):
     result = {"slot": None, "day": None, "date": None}
 
     if stage < 1 or stage > HIGHEST_STAGE:
-        logging.warning("getNextTimeSlot() stage out of bounds")
+        logging.error("getNextTimeSlot() stage out of bounds")
         return result
 
     if areaCode < 1 or areaCode > NUM_AREA_CODES:
-        logging.warning("getNextTimeSlot() areaCode out of bounds")
+        logging.error("getNextTimeSlot() areaCode out of bounds")
         return result
 
-    d = datetime.datetime.now() + datetime.timedelta(hours=2)
+    d = datetime.datetime.now() # + datetime.timedelta(hours=2)
     fromHour = d.hour
     fromDay = d.day
 
@@ -127,7 +127,7 @@ def getNextTimeSlot(stage, areaCode):
 
 
 def isLoadSheddingNow(stage, areaCode):
-    d = datetime.datetime.now() + datetime.timedelta(hours=2)
+    d = datetime.datetime.now() #+ datetime.timedelta(hours=2)
     hour = d.hour
     areaCodes = getAreaCodesByTimeValue(
         stage, d.day, datetime.time(hour=d.hour, minute=d.minute)
