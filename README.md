@@ -9,14 +9,23 @@
 [![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 
 This is a simple component to integrate with the [Eskom Loadshedding API](https://loadshedding.eskom.co.za/LoadShedding) and provide [loadshedding](https://en.wikipedia.org/wiki/South_African_energy_crisis)-related status information.
+Forked from [swartjean/ha-eskom-loadshedding](swartjean/ha-eskom-loadshedding)
 
-This integration exposes a sensor for the current stage of loadshedding.
+This integration exposes a sensor for the current stage of loadshedding. It also calculates the loadshedding shedule for COCT, and can provide a sensor indicating if the selected Area is currently in loadshedding, as well as when the next loadshedding slot for the selected area will be. this depends of course on the current loadshedding stage.
 
 **This component will set up the following platforms.**
 
 Platform | Description
 -- | --
 `sensor` | Show loadshedding status information.
+
+**This component will create the following sensors.**
+
+Sensor | Description
+-- | --
+`sensor.eskom_loadshedding_stage` | Show Current Loadshedding Stage from Eskom API (Numeric).
+`sensor.eskom_loadshedding_load_shedding_active` | Is the configured Area currently in loadshedding (True/False).
+`sensor.eskom_loadshedding_next_load_shedding` | When the next scheduled loadshedding for the area will take place (DateTime).
 
 ## Installation
 
@@ -29,6 +38,11 @@ Platform | Description
 7. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Eskom Loadshedding Interface"
 
 ## Configuration is done in the UI
+
+1. Configure the Scan Period (update frequency in seconds). Default is 900s.
+2. Configure the Area as per COCT map.
+
+NOTE: Long refresh rates kan delay the change of the sensor, as the current implementation does not run on ZERO hour, and refresh times are dependent on startup time. This generally is not an issue in practice. It just seems erratic if you are monitoring the sensor(s).
 
 <!---->
 
